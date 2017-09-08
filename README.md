@@ -5,7 +5,8 @@ This repository contains Dockerfiles for MongoDB images for OpenShift.
 Users can choose between RHEL and CentOS based images.
 
 For more information about using these images with OpenShift, please see the
-official [OpenShift Documentation](https://docs.openshift.org/latest/using_images/db_images/mongodb.html).
+official [OpenShift
+Documentation](https://docs.openshift.org/latest/using_images/db_images/mongodb.html).
 
 Versions
 ---------------------------------
@@ -33,7 +34,7 @@ Choose either the CentOS7 or RHEL7 based image:
 	```
 	$ git clone https://github.com/openshift/mongodb.git
 	$ cd mongodb
-	$ make build TARGET=rhel7 VERSION=3.2
+	$ make build TARGET=rhel7 VERSIONS=3.2
 	```
 
 *  **CentOS7 based image**
@@ -49,30 +50,30 @@ Choose either the CentOS7 or RHEL7 based image:
 	```
 	$ git clone https://github.com/openshift/mongodb.git
 	$ cd mongodb
-	$ make build TARGET=centos7 VERSION=3.2
+	$ make build TARGET=centos7 VERSIONS=3.2
 	```
 
-**Notice: By omitting the `VERSION` parameter, the build/test action will be performed
-on all provided versions of MongoDB.**
+**Notice: By omitting the `VERSIONS` parameter, the build/test action will be
+performed on all provided versions of MongoDB.**
 
 
 Usage
 ---------------------------------
 
 For information about usage of Dockerfile for MongoDB 2.6,
-see [usage documentation](2.6/README.md).
+see [usage documentation](2.6/).
 
 For information about usage of Dockerfile for MongoDB 3.0-upg,
-see [usage documentation](3.0-upg/README.md).
+see [usage documentation](3.0-upg/).
 
 For information about usage of Dockerfile for MongoDB 3.2,
-see [usage documentation](3.2/README.md).
+see [usage documentation](3.2/).
 
 Test
 ---------------------------------
 
-This repository also provides a test framework which checks basic functionality
-of the MongoDB image.
+This repository also provides a test framework which checks basic
+functionality of the MongoDB image.
 
 Users can choose between testing MongoDB based on a RHEL or CentOS image.
 
@@ -83,15 +84,15 @@ Users can choose between testing MongoDB based on a RHEL or CentOS image.
 
     ```
     $ cd mongodb
-    $ make test TARGET=rhel7 VERSION=3.2
+    $ make test TARGET=rhel7 VERSIONS=3.2
     ```
 
 *  **CentOS based image**
 
     ```
     $ cd mongodb
-    $ make test TARGET=centos7 VERSION=3.2
+    $ make test TARGET=centos7 VERSIONS=3.2
     ```
 
-**Notice: By omitting the `VERSION` parameter, the build/test action will be performed
-on all provided versions of MongoDB.**
+**Notice: By omitting the `VERSIONS` parameter, the build/test action will be
+performed on all provided versions of MongoDB.**

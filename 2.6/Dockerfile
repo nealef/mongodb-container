@@ -1,13 +1,26 @@
-FROM centos:centos7
-MAINTAINER SoftwareCollections.org <sclorg@redhat.com>
+FROM centos/s2i-core-centos7
 
-LABEL io.k8s.description="MongoDB is a scalable, high-performance, open source NoSQL database." \
+ENV SUMMARY="MongoDB NoSQL database server" \
+    DESCRIPTION="MongoDB (from humongous) is a free and open-source \
+cross-platform document-oriented database program. Classified as a NoSQL \
+database program, MongoDB uses JSON-like documents with schemas. This \
+container image contains programs to run mongod server."
+
+LABEL summary="$SUMMARY" \
+      description="$DESCRIPTION" \
+      io.k8s.description="$DESCRIPTION" \
       io.k8s.display-name="MongoDB 2.6" \
       io.openshift.expose-services="27017:mongodb" \
-      io.openshift.tags="database,mongodb,rh-mongodb26"
+      io.openshift.tags="database,mongodb,rh-mongodb26" \
+      com.redhat.component="rh-mongodb26-docker" \
+      name="centos/mongodb-26-centos7" \
+      version="2.6" \
+      release="1" \
+      maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
 ENV MONGODB_VERSION=2.6 \
     # Set paths to avoid hard-coding them in scripts.
+    APP_DATA=/opt/app-root/src \
     HOME=/var/lib/mongodb \
     CONTAINER_SCRIPTS_PATH=/usr/share/container-scripts/mongodb \
     # Incantations to enable Software Collections on `bash` and `sh -i`.
@@ -22,20 +35,23 @@ ENTRYPOINT ["container-entrypoint"]
 CMD ["run-mongod"]
 
 RUN yum install -y centos-release-scl && \
-    INSTALL_PKGS="bind-utils gettext iproute rsync tar v8314 rh-mongodb26-mongodb rh-mongodb26" && \
+    INSTALL_PKGS="bind-utils gettext iproute rsync tar shadow-utils v8314 rh-mongodb26-mongodb rh-mongodb26 groff-base" && \
     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
     yum clean all
 
-ADD root /
+COPY s2i/bin/ $STI_SCRIPTS_PATH
+ 
+COPY root /
 
 
 # Container setup
 RUN touch /etc/mongod.conf && \
     mkdir -p ${HOME}/data && \
     # Set owner 'mongodb:0' and 'g+rw(x)' permission - to avoid problems running container with arbitrary UID
-    /usr/libexec/fix-permissions /etc/mongod.conf ${CONTAINER_SCRIPTS_PATH}/mongodb.conf.template \
-    ${HOME}
+    /usr/libexec/fix-permissions /etc/mongod.conf ${CONTAINER_SCRIPTS_PATH}/mongod.conf.template \
+    ${HOME} ${APP_DATA}/.. && \
+    usermod -a -G root mongodb
 
 VOLUME ["/var/lib/mongodb/data"]
 
