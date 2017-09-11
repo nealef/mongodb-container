@@ -51,7 +51,7 @@ RUN 	useradd -c "MongoDB Owner" -s /sbin/nologin -u 184 mongodb || true
 # Container setup
 RUN	rm -f /etc/mongod.conf && \
 	touch /etc/mongod.conf && \
-	mkdir -p ${HOME}/data/{log,run} && \
+	mkdir -p ${HOME}/data && \
 	# Set owner 'mongodb:0' and 'g+rw(x)' permission - to avoid problems running container with arbitrary UID
 	/usr/libexec/fix-permissions /etc/mongod.conf ${CONTAINER_SCRIPTS_PATH}/mongod.conf.template \
 	${HOME} ${APP_DATA}/.. && \
